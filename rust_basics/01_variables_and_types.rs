@@ -1,7 +1,8 @@
 //! 第 1 课：变量与类型。
 //!
 //! 运行：cargo run --example 01_variables_and_types
-//! 学习重点：先看绑定是否可变，再看表达式的类型，最后观察作用域。
+//! 前置知识：本课是起点；先将 main 理解为程序入口，println! 理解为输出工具。
+//! 学习目标：区分赋值与遮蔽，识别基础类型，并观察绑定的作用域。
 //! 预期标准输出（Cargo 的编译提示不属于程序输出）：
 //! ```text
 //! 不可变绑定：score = 80
@@ -11,6 +12,7 @@
 //! 离开内层：value = 5
 //! 常量：MAX_POINTS = 100
 //! 标量：signed = -12, byte = 255, ratio = 2.5, passed = true, symbol = 学
+//! 改变类型的遮蔽：marker = true
 //! 算术：sum = 12, integer_quotient = 3, remainder = 1, float_quotient = 3.5
 //! 元组：count = 3, price = 4.5, mark = 学, first = 3
 //! 数组：first = 2, len = 3, repeated = [7, 7, 7]
@@ -64,6 +66,13 @@ fn main() {
         "标量：signed = {signed}, byte = {byte}, ratio = {ratio}, passed = {passed}, symbol = {symbol}"
     );
 
+    // 同名 let 还可以改变类型：旧 marker 是 i32，新的 marker 是 bool。
+    // == 是相等比较，产生 bool；右边仍先读取旧绑定，再创建新的同名绑定。
+    // 这里无需 mut，因为创建新绑定与修改原来变量的值是两回事。
+    let marker: i32 = 1;
+    let marker: bool = marker == 1;
+    println!("改变类型的遮蔽：marker = {marker}");
+
     let sum = 7 + 5;
     // 整数除法仍得到整数：向零截断，因此 7 / 2 的结果是 3。
     let integer_quotient = 7 / 2;
@@ -88,6 +97,7 @@ fn main() {
     let repeated = [7; 3]; // 值形式 [值; 次数] 在这里生成 [7, 7, 7]。
     let first = numbers[0]; // 索引从 0 开始；此处用遮蔽复用了 first 名字。
     let len = numbers.len(); // .len() 返回数组元素个数，类型是 usize。
+    // usize 是用于集合长度和索引的无符号整数，其位宽由目标平台决定。
     // 数组用 {:?} 输出调试表示；关于相关 trait，将在后续主题学习。
     println!("数组：first = {first}, len = {len}, repeated = {repeated:?}");
 
@@ -102,7 +112,8 @@ fn main() {
     // let mixed = [1, true];
     // 原因：同一数组的元素类型必须相同。修复：使用 (1, true) 元组。
 
-    // 运行时错误提醒：用变量访问越界索引通常会触发 panic，程序随即中止。
+    // 运行时错误提醒：访问越界索引会触发 panic；本示例没有恢复 panic 的处理，
+    // 若执行到越界访问，当前运行会提前结束并以失败状态退出。
     // 例如本数组仅允许索引 0、1、2；固定越界表达式也可能在编译时被发现。
     // 本课先记住范围，后续会学习用更安全的方式处理可能不存在的元素。
 

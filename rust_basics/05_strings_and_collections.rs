@@ -1,11 +1,12 @@
 // 第 5 课：字符串与集合。
 // 运行命令：cargo run --example 05_strings_and_collections
 // 前置知识：先完成第 4 课，理解拥有数据与借用数据的区别。
+// 学习目标：选择拥有文本或借用文本，理解 UTF-8 长度，并用集合保存和查询数据。
 //
 // 预期输出（不含 Cargo 自己的编译和运行提示）：
 // 借用视图：Rust
 // 可增长字符串：Rust 基础!
-// UTF-8：字节数 = 7, 字符数 = 3
+// UTF-8：字节数 = 7, Unicode 标量数 = 3
 // 合法切片：你好
 // Vec：values = [10, 25, 30, 40], len = 4
 // Vec 查询：索引 1 = Some(25), 索引 9 = None
@@ -40,16 +41,17 @@ fn main() {
     title.push('!');
     println!("可增长字符串：{title}");
 
-    // 二、UTF-8：字节长度与字符数量不是同一个概念。
+    // 二、UTF-8：字节长度、Unicode 标量数量与人眼看到的字符数量不一定相同。
     // “你”和“好”各占 3 个 UTF-8 字节，ASCII 字符 a 占 1 个字节，总共 7 字节。
     let unicode: &str = "你好a";
     let byte_count: usize = unicode.len(); // len() 对 str/String 返回字节数。
     // chars() 按 Unicode 标量值依次访问，count() 统计个数；这里只认识这一用法。
     // 迭代器机制留到第 9 课；一个人眼中的字符可能由多个 Unicode 标量组成。
-    let character_count: usize = unicode.chars().count();
-    println!("UTF-8：字节数 = {byte_count}, 字符数 = {character_count}");
+    let scalar_count: usize = unicode.chars().count();
+    println!("UTF-8：字节数 = {byte_count}, Unicode 标量数 = {scalar_count}");
 
     // 切片范围按“字节偏移”指定：包含 0、不包含 6，且两端必须位于字符边界。
+    // 范围还必须满足“起点 <= 终点 <= 字节长度”；超出范围也会 panic。
     // 因为已知这个固定文本的编码，0..6 恰好选中“你好”，结果仍是借用的 &str。
     // 不能把这里的 6 当成任意中文文本通用的截取规则。
     let greeting: &str = &unicode[0..6];
@@ -89,7 +91,7 @@ fn main() {
     scores.insert("Rust", 90);
     scores.insert("Go", 88);
     scores.insert("Rust", 95); // 同一个键再次插入会替换旧值，不会新增一个相同的键。
-    // insert 会返回被替换的旧值（同样通过 Option 表示），本课暂不使用该返回值。
+    // insert 返回 Option：新键得到 None，替换旧键得到 Some(旧值)；本课暂不使用它。
 
     // get 同样返回可选的借用；固定按键查询，使输出顺序明确。
     // HashMap 不承诺遍历顺序，因此不要依赖直接打印整个映射得到固定次序。
@@ -123,11 +125,17 @@ fn main() {
     // let mixed = vec![1, true];
     // 修复：让所有元素都是整数；若是固定位置的不同类型数据，可改用 (1, true) 元组。
 
-    // 常见运行时错误：切片端点落在一个 UTF-8 字符的中间。
+    // 常见运行时错误 1：切片端点落在一个 UTF-8 字符的中间。
     // 观察方法：仅取消下一行的 //，运行本课命令；它能编译，但运行到这里会 panic。
     // println!("错误切片：{}", &unicode[0..1]);
     // 字节 1 位于“你”的编码内部。修复：本例改用 0..3 选中“你”，或 0..6 选中“你好”。
     // 这属于运行时检查，区别于上面 title[0] 被编译器直接拒绝的情况。
+
+    // 常见运行时错误 2：Vec 索引越界；get 会返回 None，而 [] 索引会 panic。
+    // 观察方法：同时取消下面两行代码的 //，编译成功后运行到这里会 panic。
+    // let missing_index = values.len();
+    // println!("错误索引：{}", values[missing_index]);
+    // 长度为 4 时合法索引是 0～3；修复：用 get 查询，再按第 7 课处理 Some/None。
     // 每次只启用一个反例，观察后恢复注释，再运行最终编译检查。
 }
 

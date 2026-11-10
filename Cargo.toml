@@ -26,3 +26,15 @@ path = "rust_basics/04_ownership_and_borrowing.rs"
 [[example]]
 name = "05_strings_and_collections"
 path = "rust_basics/05_strings_and_collections.rs"
+
+[[example]]
+name = "06_struct_enum_match"
+path = "rust_basics/06_struct_enum_match.rs"
+
+[[example]]
+name = "07_option_and_result"
+path = "rust_basics/07_option_and_result.rs"
+
+[[example]]
+name = "08_generics_and_traits"
+path = "rust_basics/08_generics_and_traits.rs"
