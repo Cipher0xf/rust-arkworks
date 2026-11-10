@@ -4,5 +4,25 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ark-bn254 = "0.5"
-ark-ff = "0.5"
+
+# 课程按学习主题存放，使用显式路径保留 cargo run --example <名称> 的运行方式。
+
+[[example]]
+name = "01_variables_and_types"
+path = "rust_basics/01_variables_and_types.rs"
+
+[[example]]
+name = "02_control_flow"
+path = "rust_basics/02_control_flow.rs"
+
+[[example]]
+name = "03_functions"
+path = "rust_basics/03_functions.rs"
+
+[[example]]
+name = "04_ownership_and_borrowing"
+path = "rust_basics/04_ownership_and_borrowing.rs"
+
+[[example]]
+name = "05_strings_and_collections"
+path = "rust_basics/05_strings_and_collections.rs"

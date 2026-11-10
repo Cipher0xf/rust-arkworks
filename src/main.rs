@@ -1,27 +1,12 @@
-use ark_bn254::Fr;
-use ark_ff::Field;
-
-fn evaluate(coeffs: &[Fr], x: Fr) -> Fr {
-    coeffs
-        .iter()
-        .rev()
-        .fold(Fr::from(0u64), |acc, &c| acc * x + c)
-}
-
+// Cargo 默认把 src/main.rs 当作主程序，cargo run 会从这里的 main 函数开始执行。
+// 此处只展示学习导航。每一课都有独立的 main，放在 rust_basics/ 中，方便逐课阅读、修改。
+// println! 后面的 ! 表示它是宏；目前只需把它当作“输出一行文字”的工具。
 fn main() {
-    let a = Fr::from(3u64);
-    let b = Fr::from(5u64);
-
-    let sum = a + b;
-    let product = a * b;
-    let power = a.pow([4u64]);
-
-    assert_eq!(sum, Fr::from(8u64));
-    assert_eq!(product, Fr::from(15u64));
-    assert_eq!(power, Fr::from(81u64));
-
-    let inverse = a.inverse().expect("3 is nonzero");
-    assert_eq!(a * inverse, Fr::from(1u64));
-
-    println!("All field checks passed.");
+    println!("Rust 基础学习（rust_basics/）：当前已提供前五个主题，建议每次只学习一课。");
+    println!("1. 变量与类型：cargo run --example 01_variables_and_types");
+    println!("2. 控制流：cargo run --example 02_control_flow");
+    println!("3. 函数：cargo run --example 03_functions");
+    println!("4. 所有权与借用：cargo run --example 04_ownership_and_borrowing");
+    println!("5. 字符串与集合：cargo run --example 05_strings_and_collections");
+    println!("请按顺序阅读 rust_basics/ 中的中文注释，并对照预期输出完成练习。");
 }
